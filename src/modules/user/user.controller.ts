@@ -41,3 +41,51 @@ const getSingleUser = async (req: Request, res: Response) => {
     console.log(err);
   }
 };
+
+const updateSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { updatedUserData } = req.body;
+    const result = await userService.updateSingleUserIntoDB(
+      userId,
+      updatedUserData,
+    );
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully',
+      data: result,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+const deleteSingleUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await userService.deleteSingleUserFromDB(userId);
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully',
+      data: result,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+export const UserController = {
+  createUser,
+  getAllUser,
+  getSingleUser,
+  updateSingleUser,
+  deleteSingleUser,
+};
