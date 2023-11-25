@@ -9,13 +9,11 @@ export type Address = {
   country: string;
 };
 
-export type Orders = [
-  {
-    productName: string;
-    price: number;
-    quantity: number;
-  },
-];
+export type Orders = {
+  productName: string;
+  price: number;
+  quantity: number;
+};
 
 export type User = {
   userId: number;
@@ -27,5 +25,5 @@ export type User = {
   isActive: boolean;
   hobbies: string[];
   address: Address;
-  orders: Orders;
+  orders?: Orders[];
 };

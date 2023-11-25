@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import { userService } from './user.services';
+import UserSchema from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
-    const result = await userService.createNewUserIntoDB(userData);
+    const zodValidatedUserData = UserSchema.parse(userData);
+    const result = await userService.createNewUserIntoDB(zodValidatedUserData);
     res.status(200).json({
       success: true,
       message: 'User  Created Successfully',
@@ -30,11 +32,11 @@ const getAllUser = async (req: Request, res: Response) => {
 
 const getSingleUser = async (req: Request, res: Response) => {
   try {
-    const { studentId } = req.params;
-    const result = await userService.getSingleUserFromAllDB(studentId);
+    const userId: any = req.params.userId;
+    const result = await userService.getSingleUserFromAllDB(userId);
     res.status(200).json({
       success: true,
-      message: 'Student is retrieved Successfully',
+      message: 'User is retrieved Successfully',
       data: result,
     });
   } catch (err) {
@@ -44,8 +46,8 @@ const getSingleUser = async (req: Request, res: Response) => {
 
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-    const { updatedUserData } = req.body;
+    const userId: any = req.params.userId;
+    const updatedUserData = req.body;
     const result = await userService.updateSingleUserIntoDB(
       userId,
       updatedUserData,
@@ -66,12 +68,12 @@ const updateSingleUser = async (req: Request, res: Response) => {
 
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const userId: any = req.params.userId;
     const result = await userService.deleteSingleUserFromDB(userId);
     res.status(200).json({
       success: true,
-      message: 'User deleted successfully',
-      data: result,
+      message: 'User deleted successfully!',
+      data: null,
     });
   } catch (err) {
     console.log(err);
