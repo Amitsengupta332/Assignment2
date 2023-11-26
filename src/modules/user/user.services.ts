@@ -1,5 +1,5 @@
 import { userModel } from '../user.model';
-import { User } from './user.interface';
+import { Orders, User } from './user.interface';
 
 //create user
 const createNewUserIntoDB = async (userData: User) => {
@@ -46,10 +46,24 @@ const deleteSingleUserFromDB = async (id: number) => {
   return result;
 };
 
+// add order in db
+const addOrderIntoDB = async (id: number, orderInfo: Orders) => {
+  const result = await userModel.findOneAndUpdate(
+    { userId: id },
+    { $push: { orders: orderInfo } },
+    { upsert: true, new: true },
+  );
+  return result;
+};
+
+// calculate total
+const totalPrice = async (id: number) => {};
+
 export const userService = {
   createNewUserIntoDB,
   getAllUserFromAllDB,
   getSingleUserFromAllDB,
   updateSingleUserIntoDB,
   deleteSingleUserFromDB,
+  addOrderIntoDB,
 };

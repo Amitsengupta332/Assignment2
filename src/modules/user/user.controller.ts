@@ -34,6 +34,18 @@ const getSingleUser = async (req: Request, res: Response) => {
   try {
     const userId: any = req.params.userId;
     const result = await userService.getSingleUserFromAllDB(userId);
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+
     res.status(200).json({
       success: true,
       message: 'User is retrieved Successfully',
@@ -84,10 +96,76 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const addOrder = async (req: Request, res: Response) => {
+  try {
+    const userId: any = req.params.userId;
+    const user = await userService.getSingleUserFromAllDB(userId);
+    const orderInfo = req.body;
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+
+    const result = await userService.addOrderIntoDB(userId, orderInfo);
+
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: null,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// get the order
+const getOrdersData = async (req: Request, res: Response) => {
+  try {
+    const userId: any = req.params.userId;
+    const user = await userService.getSingleUserFromAllDB(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+
+    const { orders } = user.toObject();
+
+    res.status(200).json({
+      success: true,
+      message: 'Orders fetched successfully',
+      data: {
+        orders,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'something went wrong',
+      err,
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getAllUser,
   getSingleUser,
   updateSingleUser,
   deleteSingleUser,
+  addOrder,
+  getOrdersData,
 };
