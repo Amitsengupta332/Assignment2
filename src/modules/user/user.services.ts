@@ -56,9 +56,6 @@ const addOrderIntoDB = async (id: number, orderInfo: Orders) => {
   return result;
 };
 
-// calculate total
-const totalPrice = async (id: number) => {};
-
 export const userService = {
   createNewUserIntoDB,
   getAllUserFromAllDB,
