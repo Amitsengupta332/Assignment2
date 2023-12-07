@@ -11,7 +11,7 @@ const AddressSchema = z.object({
   country: z.string(),
 });
 
-const OrderSchema = z.object({
+export const OrderSchema = z.object({
   productName: z.string(),
   price: z.number().positive('Price must be a positive number'),
   quantity: z.number().positive('Quantity must be a positive number'),

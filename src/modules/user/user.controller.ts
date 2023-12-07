@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
 import { userService } from './user.services';
-import UserSchema from './user.validation';
+import UserSchema, { OrderSchema } from './user.validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body;
+    const userData = req.body;
     const zodValidatedUserData = UserSchema.parse(userData);
     const result = await userService.createNewUserIntoDB(zodValidatedUserData);
     res.status(200).json({
       success: true,
-      message: 'User  Created Successfully',
+      message: 'User created successfully!',
       data: result,
     });
   } catch (err) {
@@ -22,7 +22,7 @@ const getAllUser = async (req: Request, res: Response) => {
     const result = await userService.getAllUserFromAllDB();
     res.status(200).json({
       success: true,
-      message: 'User are retrieved Successfully',
+      message: 'Users fetched successfully!',
       data: result,
     });
   } catch (err) {
@@ -48,7 +48,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'User is retrieved Successfully',
+      message: 'Users fetched successfully!',
       data: result,
     });
   } catch (err) {
@@ -60,13 +60,20 @@ const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const userId: any = req.params.userId;
     const updatedUserData = req.body;
+
+    const zodValidatedUserData = UserSchema.parse(updatedUserData);
     const result = await userService.updateSingleUserIntoDB(
       userId,
-      updatedUserData,
+      zodValidatedUserData,
     );
+
+    // const result = await userService.updateSingleUserIntoDB(
+    //   userId,
+    //   updatedUserData,
+    // );
     res.status(200).json({
       success: true,
-      message: 'User updated successfully',
+      message: 'User updated successfully!',
       data: result,
     });
   } catch (err) {
@@ -113,7 +120,11 @@ const addOrder = async (req: Request, res: Response) => {
       });
     }
 
-    const result = await userService.addOrderIntoDB(userId, orderInfo);
+    const zodValidatedUserData = OrderSchema.parse(orderInfo);
+    const result = await userService.addOrderIntoDB(
+      userId,
+      zodValidatedUserData,
+    );
 
     res.status(200).json({
       success: true,
@@ -176,17 +187,17 @@ const totalPrice = async (req: Request, res: Response) => {
     }
 
     if (user?.orders !== undefined && user?.orders.length > 0) {
-      let sum = 0;
+      let totalPrice = 0;
       user?.orders.forEach((order) => {
         if (order.price !== undefined && order.quantity !== undefined) {
-          sum += order.price * order.quantity;
+          totalPrice += order.price * order.quantity;
         }
       });
 
       res.status(200).json({
         success: true,
         message: 'Total price calculated successfully!',
-        data: { sum },
+        data: { totalPrice },
       });
     }
   } catch (err) {

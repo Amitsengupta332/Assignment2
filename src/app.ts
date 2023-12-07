@@ -8,7 +8,7 @@ import { userRoute } from './modules/user/user.route';
 app.use(express.json());
 app.use(cors());
 
-app.use('/api/users', userRoute);
+app.use('/api', userRoute);
 
 app.get('/', (req: Request, res: Response) => {
   res.send(' assignment 2 running');

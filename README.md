@@ -1,4 +1,4 @@
-# Hosting Link in Vercel -> https://level2assignment2-hzqms6m65-amitsengupta332.vercel.app/
+# Hosting Link in Vercel -> https://asignment-repeat-2.vercel.app/
 
 Instructions for run this file locally
 

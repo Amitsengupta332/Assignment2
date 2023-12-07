@@ -1,8 +1,8 @@
 import { userModel } from '../user.model';
-import { Orders, User } from './user.interface';
+import { TOrders, TUser } from './user.interface';
 
 //create user
-const createNewUserIntoDB = async (userData: User) => {
+const createNewUserIntoDB = async (userData: TUser) => {
   const result = await userModel.create(userData);
   return result;
 };
@@ -27,7 +27,10 @@ const getSingleUserFromAllDB = async (id: number) => {
 
 //update user data
 
-const updateSingleUserIntoDB = async (id: number, updatedUserData: User) => {
+const updateSingleUserIntoDB = async (
+  id: number,
+  updatedUserData: Partial<TUser>,
+) => {
   const result = await userModel
     .findOneAndUpdate(
       { userId: id },
@@ -47,7 +50,7 @@ const deleteSingleUserFromDB = async (id: number) => {
 };
 
 // add order in db
-const addOrderIntoDB = async (id: number, orderInfo: Orders) => {
+const addOrderIntoDB = async (id: number, orderInfo: TOrders) => {
   const result = await userModel.findOneAndUpdate(
     { userId: id },
     { $push: { orders: orderInfo } },

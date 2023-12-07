@@ -1,7 +1,7 @@
 import { Schema, model, connect } from 'mongoose';
-import { Address, FullName, Orders, User } from './user/user.interface';
+import { TAddress, TFullName, TOrders, TUser } from './user/user.interface';
 
-const FullNameSchema = new Schema<FullName>({
+const FullNameSchema = new Schema<TFullName>({
   firstName: {
     type: String,
     required: true,
@@ -12,20 +12,20 @@ const FullNameSchema = new Schema<FullName>({
   },
 });
 
-const AddressSchema = new Schema<Address>({
+const AddressSchema = new Schema<TAddress>({
   street: { type: String },
   city: { type: String },
   country: { type: String },
 });
 
-const OrderSchema = new Schema<Orders>({
+const OrderSchema = new Schema<TOrders>({
   productName: { type: String },
   price: { type: Number },
   quantity: { type: Number },
 });
 
-const UserSchema = new Schema<User>({
-  userId: { type: Number },
+const UserSchema = new Schema<TUser>({
+  userId: { type: Number, unique: true, required: true },
   username: { type: String },
   password: { type: String },
   fullName: FullNameSchema,
@@ -34,10 +34,9 @@ const UserSchema = new Schema<User>({
   isActive: { type: Boolean },
   hobbies: {
     type: [String],
-    required: true,
   },
   address: AddressSchema,
   orders: [OrderSchema],
 });
 
-export const userModel = model<User>('Users', UserSchema);
+export const userModel = model<TUser>('Users', UserSchema);
